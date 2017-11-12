@@ -39,3 +39,6 @@ Thumbs.db
 OldStuff/
 Draftkings/
 models/
+
+# Config #
+config.py
