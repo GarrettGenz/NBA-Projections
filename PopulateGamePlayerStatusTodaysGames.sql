@@ -7,8 +7,11 @@ SELECT	tg.gameid, tg.team, i.playerid,
 	CASE WHEN i.status IN ('PG', 'SG', 'SF', 'PF', 'C') THEN true ELSE false END AS "is_starter",
 	CASE WHEN i.status IN ('Out') THEN true ELSE false END AS "is_inactive",
 	CASE
-            WHEN p."position"::text ~~ 'Guard%'::text THEN 'Guard'::text
-			WHEN p."position"::text ~~ 'Center%'::text THEN 'Center'::text
+      WHEN i.status IN ('PG', 'SG') THEN 'Guard'
+			WHEN i.status IN ('SF', 'PF') THEN 'Forward'
+			WHEN i.status IN ('C') THEN 'Center'
+			WHEN p."position"::text ~~ 'Guard%'::text THEN 'Guard'::text
+			WHEN p."position"::text ~~ '%Center%'::text THEN 'Center'::text
 			WHEN p."position"::text ~~ 'Forward%'::text THEN 'Forward'::text
     END::character varying(100) AS "position"
 FROM	injuries i JOIN todays_games tg ON i.team = tg.team
@@ -18,9 +21,9 @@ FROM	injuries i JOIN todays_games tg ON i.team = tg.team
 INSERT INTO game_player_status(gameid, team, playerid, is_starter, is_inactive, position)
 SELECT	tg.gameid, tg.team, p.playerid, false, false,
 			CASE
-            WHEN p."position"::text ~~ 'Guard%'::text THEN 'Guard'::text
-			WHEN p."position"::text ~~ 'Center%'::text THEN 'Center'::text
-			WHEN p."position"::text ~~ 'Forward%'::text THEN 'Forward'::text
+				WHEN p."position"::text ~~ 'Guard%'::text THEN 'Guard'::text
+				WHEN p."position"::text ~~ '%Center%'::text THEN 'Center'::text
+WHEN p."position"::text ~~ 'Forward%'::text THEN 'Forward'::text
     END::character varying(100) AS "position"
 FROM	players p JOIN todays_games tg ON p.team = tg.team
 WHERE	playerid NOT IN (SELECT playerid 

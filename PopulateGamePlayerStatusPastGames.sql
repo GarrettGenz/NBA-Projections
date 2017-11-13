@@ -8,7 +8,7 @@ SELECT ps.gameid, ps.team_abbrev, ps.playerid,
 		CASE WHEN comment LIKE 'DND%' OR comment LIKE 'NWT%' THEN true ELSE false END AS "is_inactive",
 		CASE
             WHEN p."position"::text ~~ 'Guard%'::text THEN 'Guard'::text
-                    WHEN p."position"::text ~~ 'Center%'::text THEN 'Center'::text
+                    WHEN p."position"::text ~~ '%Center%'::text THEN 'Center'::text
                     WHEN p."position"::text ~~ 'Forward%'::text THEN 'Forward'::text
                     WHEN (ps.fg3a::double precision / (ps.reb::double precision + 0.001::double precision)) < 0.1::double precision THEN 'Center'::text
                     WHEN (ps.fg3a::double precision / (ps.reb::double precision + 0.001::double precision)) >= 0.1::double precision AND ps.reb > 5 THEN 'Forward'::text
@@ -40,3 +40,5 @@ AND ttd.gameid > (SELECT MAX(gameid) FROM game_player_status WHERE gameid < 4000
 AND ttd.gameid < (SELECT MIN(gameid) FROM todays_games)
 -- This line is because running this for all previous games takes way too long
 GROUP BY ttd.gameid, ttd.team, ps.playerid;
+
+
