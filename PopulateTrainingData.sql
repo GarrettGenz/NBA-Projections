@@ -7,10 +7,11 @@ SELECT  ps.gameid, ps.team_abbrev, ps.playerid, ps.fgm, ps.fg3m, ps.ftm, ps.oreb
             ELSE 0
         END
 FROM    playerstats ps
-WHERE   gameid IN (SELECT gameid FROM games WHERE game_date > (('now'::text)::date - '10 months'::interval))
+WHERE   gameid IN (SELECT gameid FROM games WHERE game_date > (('now'::text)::date - '11 months'::interval))
 AND     ps.comment::text !~~ 'DND%'::text AND ps.comment::text !~~ 'NWT%'::text
+AND     gameid < 30000000 -- Don't include playoffs
 ORDER BY gameid DESC
-LIMIT 	10000;
+LIMIT 	15000;
 
 UPDATE  training_data
 SET     home_or_away = ttd.home_or_away,
