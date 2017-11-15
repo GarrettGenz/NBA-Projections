@@ -71,11 +71,11 @@ def daily_updates():
     print ('Populate table game_player_status with projected data for today...')
     cur.execute(codecs.open("PopulateGamePlayerStatusTodaysGames.sql", "r", encoding='us-ascii').read())
     conn.commit()
-	
+
     print ('Populate table Offensive_Player_Average_Stats...')
     cur.execute(codecs.open("PopulateOffensivePlayerAverageStats.sql", "r", encoding='us-ascii').read())
     conn.commit()
-	
+
     print ('Update table game_player_status with minutes missing to injuries...')
     cur.execute(codecs.open("UpdateMinutesMissing.sql", "r", encoding='us-ascii').read())
     conn.commit()

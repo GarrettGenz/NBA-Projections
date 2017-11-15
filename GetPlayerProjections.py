@@ -169,7 +169,7 @@ def main():
     for index, row in test.iterrows():
         for alg1, alg2, col in col_algs:
     #    for alg1, col in col_algs:
-            player_projs[col] = alg1.predict(test[train_cols].loc[[index]]) * .5 + alg2.predict(test[train_cols].loc[[index]]) * .5
+            player_projs[col] = alg1.predict(test[train_cols].loc[[index]])# * .5 + alg2.predict(test[train_cols].loc[[index]]) * .5
     #        player_projs[col] = alg1.predict(test[train_cols].loc[[index]])
             if player_projs[col].values < 0:
                 player_projs[col] = 0
