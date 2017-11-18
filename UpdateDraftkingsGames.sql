@@ -12,7 +12,7 @@ WHERE	team = 'SA';
 
 UPDATE	draftkings
 SET	team = 'PHX'
-WHERE	team = 'Pho';
+WHERE	team = 'PHO';
 
 UPDATE	draftkings
 SET	team = 'GSW'

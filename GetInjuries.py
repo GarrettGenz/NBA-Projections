@@ -43,8 +43,8 @@ def main():
             player_name = str(player.get_text())
             print player_name + ' : GTD'
             cur.execute("""INSERT INTO injuries(name, status)
-                            SELECT %s, 'GTD' WHERE NOT EXISTS (SELECT * FROM injuries WHERE name = %s)""", 
-                            (player_name, player_name,)
+                            SELECT %s, 'GTD'""",
+                            (player_name,)
                             )
             conn.commit() 
     cur.close()
