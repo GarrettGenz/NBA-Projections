@@ -71,6 +71,14 @@ WHERE	injuries.name = 'Larry Nance'
 AND	players.playerid = 1626204
 AND	injuries.playerid IS NULL;
 
+UPDATE	injuries
+SET	playerid = players.playerid ,
+	team = players.team
+FROM	players
+WHERE	injuries.name = 'Gary Payton'
+AND	players.playerid = 1627780
+AND	injuries.playerid IS NULL;
+
 -- If a starter is a GTD, remove the starter rows
 DELETE FROM injuries
 WHERE status IN ('PG', 'SG', 'SF', 'PF', 'C')

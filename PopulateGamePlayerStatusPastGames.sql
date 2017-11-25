@@ -5,7 +5,7 @@ DELETE FROM game_player_status WHERE gameid IN (SELECT gameid FROM games where g
 INSERT INTO game_player_status(gameid, team, playerid, is_starter, is_inactive, position)
 SELECT ps.gameid, ps.team_abbrev, ps.playerid,
 		CASE WHEN start_pos <> '' THEN true ELSE false END AS "is_starter",
-		CASE WHEN comment LIKE 'DND%' OR comment LIKE 'NWT%' THEN true ELSE false END AS "is_inactive",
+		CASE WHEN comment LIKE 'DND%' OR comment LIKE 'NWT%' OR comment LIKE 'DNP - Injury%' THEN true ELSE false END AS "is_inactive",
 		CASE
 				  WHEN ps.start_pos = 'C' THEN 'Center'
 					WHEN ps.start_pos = 'F' THEN 'Forward'
@@ -28,16 +28,23 @@ AND ps.gameid < (SELECT MIN(gameid) FROM todays_games);
 
 -- Add players who recently played games prior to each game, but didnt play in the target game
 -- This can be due to IR/trades/inactive player
--- Dont populate position because it doesn't matter since we will never train on this data
 CREATE TEMP TABLE players_in_recent_games(gameid INTEGER, playerid INTEGER, team varchar(10), position varchar(10));
 
-INSERT INTO players_in_recent_games(gameid, playerid, team, position)
-SELECT ttd.gameid, ps.playerid, ttd.team, ps.position
+INSERT INTO players_in_recent_games(gameid, playerid, team)
+SELECT ttd.gameid, ps.playerid, ttd.team
 FROM    playerstats ps
 JOIN team_training_data ttd
     ON (ps.team_abbrev = ttd.team AND ps.gameid < ttd.gameid AND ps.gameid >= ttd.prev_gameid)
-WHERE ttd.gameid IN (SELECT gameid FROM games where game_date > now() - '1 year'::INTERVAL)
-GROUP BY ttd.gameid, ttd.team, ps.playerid, ps.position;
+WHERE ttd.gameid > (SELECT MAX(gameid) FROM game_player_status WHERE gameid < 40000000)
+AND		ttd.gameid < (SELECT MIN(gameid) FROM todays_games)
+GROUP BY ttd.gameid, ttd.team, ps.playerid;
+
+UPDATE	players_in_recent_games pirg
+SET			position = (	SELECT position
+											FROM playerstats ps
+											WHERE pirg.playerid = ps.playerid AND pirg.gameid = ps.gameid AND pirg.team = ps.team_abbrev
+											AND		ps.gameid < pirg.gameid
+											LIMIT 1);
 
 -- Don't include players that played in the game
 DELETE FROM players_in_recent_games

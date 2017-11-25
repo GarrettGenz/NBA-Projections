@@ -80,6 +80,10 @@ def daily_updates():
     cur.execute(codecs.open("UpdateMinutesMissing.sql", "r", encoding='us-ascii').read())
     conn.commit()
 
+    print ('Update table game_player_status with usage missing to injuries...')
+    cur.execute(codecs.open("UpdateUsageMissing.sql", "r", encoding='us-ascii').read())
+    conn.commit()
+
     print ('Populate the table that holds all training data...')
     cur.execute(codecs.open("PopulateTrainingData.sql", "r", encoding='us-ascii').read())
     conn.commit()

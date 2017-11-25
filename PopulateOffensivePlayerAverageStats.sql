@@ -37,7 +37,7 @@ INSERT INTO offensive_player_average_stats(playerid, position, gameid, team, hom
 		med_blk, med_turnover, med_pf, avg_fgm, avg_fga, avg_fg3m, avg_fg3a, avg_ftm, avg_fta, avg_oreb,
 		avg_dreb, avg_ast, avg_stl, avg_blk, avg_turnover, avg_pf, usage)
 SELECT	ps.playerid, ps.position, ttd.gameid, ttd.team, ttd.home_or_away, 0, ttd.prev_gameid,
-	avg(ps.min),
+	SUM(ps.min) / (SELECT value from config WHERE name = 'num_prev_games'),
 	median(CASE WHEN ps.is_starter <> gps.is_starter THEN ps.fgm * gps.start_multiplier
 	            ELSE ps.fgm
 	        END),

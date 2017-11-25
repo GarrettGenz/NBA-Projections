@@ -38,7 +38,7 @@ def match_categoricals(cols, train, test):
 
 def main():
     print ('Delete models more than 1 day old...')
-    #config.delete_files(2, 'models/')
+    config.delete_files(2, 'models/')
     
     print ('Loading Data...')
 
@@ -142,7 +142,7 @@ def main():
         if os.path.exists(os.path.join(dir, file_path)):
            xgb_alg = pickle.load(open(file_path, "rb"))
         else:
-           gsCV = GridSearchCV(estimator=rf_test, param_grid=params, cv=3, n_jobs=-1, verbose=1, fit_params=fit_params)
+           gsCV = GridSearchCV(estimator=rf_test, param_grid=params, cv=4, n_jobs=-1, verbose=1, fit_params=fit_params)
            gsCV.fit(training[train_cols], training[target])
            print(gsCV.best_estimator_)
            print(gsCV.best_params_)

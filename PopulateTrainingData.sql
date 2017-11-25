@@ -57,8 +57,12 @@ AND     training_data.team = oav.team
 AND     training_data.playerid = oav.playerid;
 
 UPDATE  training_data
-SET     pos_mins_inj = COALESCE(gps.pos_min_missing, 0),
-        team_mins_inj = COALESCE(gps.tot_min_missing, 0)
+SET     guard_min_missing = COALESCE(gps.guard_min_missing, 0),
+        forward_min_missing = COALESCE(gps.forward_min_missing, 0),
+        center_min_missing  = COALESCE(gps.center_min_missing, 0),
+        guard_usage_missing = COALESCE(gps.guard_usage_missing, 0),
+        forward_usage_missing = COALESCE(gps.forward_usage_missing, 0),
+        center_usage_missing = COALESCE(gps.center_usage_missing, 0)
 FROM    game_player_status gps
 WHERE   training_data.gameid = gps.gameid
 AND     training_data.team = gps.team
@@ -74,6 +78,9 @@ WHERE   EXISTS(SELECT *
 
 DELETE FROM training_data
 WHERE   position IS NULL;
+
+DELETE FROM training_data
+WHERE	guard_min_missing > 60 OR forward_min_missing > 60 OR center_min_missing > 40;
 
 UPDATE  training_data
 SET     off_med_fgm = tav.med_fgm,
