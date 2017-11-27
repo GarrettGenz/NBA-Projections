@@ -38,7 +38,7 @@ def match_categoricals(cols, train, test):
 
 def main():
     print ('Delete models more than 1 day old...')
-    config.delete_files(2, 'models/')
+    config.delete_files(3, 'models/')
     
     print ('Loading Data...')
 
