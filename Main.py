@@ -61,16 +61,16 @@ def daily_updates():
     conn = psycopg2.connect(host=config.endpoint, database=config.database, user=config.user, password=config.password)
     cur = conn.cursor()
 
-    # print ('Get Starters/Injuries...')
-    # GetInjuries.main()
-    #
-    # print ('Update injuries for the current day...')
-    # cur.execute(codecs.open("UpdateInjuryData.sql", "r", encoding='us-ascii').read())
-    # conn.commit()
-    #
-    # print ('Populate table game_player_status with projected data for today...')
-    # cur.execute(codecs.open("PopulateGamePlayerStatusTodaysGames.sql", "r", encoding='us-ascii').read())
-    # conn.commit()
+    print ('Get Starters/Injuries...')
+    GetInjuries.main()
+
+    print ('Update injuries for the current day...')
+    cur.execute(codecs.open("UpdateInjuryData.sql", "r", encoding='us-ascii').read())
+    conn.commit()
+
+    print ('Populate table game_player_status with projected data for today...')
+    cur.execute(codecs.open("PopulateGamePlayerStatusTodaysGames.sql", "r", encoding='us-ascii').read())
+    conn.commit()
 
     print ('Populate table Offensive_Player_Average_Stats...')
     cur.execute(codecs.open("PopulateOffensivePlayerAverageStats.sql", "r", encoding='us-ascii').read())
@@ -109,7 +109,7 @@ def daily_updates():
     cur.close()
     conn.close()
 
-#beg_of_week_updates()
+beg_of_week_updates()
 
 daily_updates()
 

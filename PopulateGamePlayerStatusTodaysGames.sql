@@ -58,7 +58,8 @@ FROM    avg_start_mins_per_position mins
 WHERE   start_mult.gameid = mins.gameid
 AND     start_mult.team = mins.team
 AND     start_mult.position = mins.position
-AND     start_mult.new_starter = 0;
+AND     start_mult.new_starter = 0
+AND			start_mult.avg_min <> 0;
 
 UPDATE game_player_status SET start_multiplier = start_mult.start_multiplier
 FROM start_mult
